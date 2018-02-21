@@ -3,6 +3,7 @@ package com.example.demo.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 
 /**
  * Created by noba on 12/16/2017.
@@ -20,7 +21,7 @@ public class User {
     @ApiModelProperty(notes = "The age of the user")
     private int age;
     @ApiModelProperty(notes = "The salary of the user")
-    private Integer salary;
+    private Long salary;
 
     public Integer getId() {
         return id;
@@ -46,11 +47,11 @@ public class User {
         this.age = age;
     }
 
-    public Integer getSalary() {
+    public Long getSalary() {
         return salary;
     }
 
-    public void setSalary(Integer salary) {
+    public void setSalary(Long salary) {
         this.salary = salary;
     }
 }

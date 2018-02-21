@@ -4,6 +4,8 @@ import com.example.demo.controller.UserController;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import com.example.demo.util.Error;
+import com.example.demo.util.ErrorStatus;
+import com.example.demo.util.Response;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,28 +40,37 @@ public class UserControllerImpl implements UserController {
     @Override
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list", response = User.class, responseContainer = "List"),
-            @ApiResponse(code = 204, message = "No data is found")
+            @ApiResponse(code = 422, message = "Unprocessable entity found", response = HttpHeaders.class)
     })
     public ResponseEntity<List<User>> listAllUsers() {
-        List<User> users = this.userService.findAll();
-        if(users.isEmpty())
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        try {
+            List<User> users = this.userService.findAll();
+            if(users.isEmpty())
+                return new ResponseEntity(new Response<>(ErrorStatus.NO_DATA), HttpStatus.OK);
+            //return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new Response<>(users), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return new ResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
     @Override
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list", response = User.class),
-            @ApiResponse(code = 404, message = "No data is found-1", response = Error.class)
+            @ApiResponse(code = 422, message = "Unprocessable entity found", response = HttpHeaders.class)
     })
     public ResponseEntity<?> getUser(@PathVariable("id") long id) {
-        LOGGER.info("Fetching user with id {}", id);
-        User user = this.userService.findById((int)id);
-        if(user == null){
-            LOGGER.error("User with id {} is not found", id);
-            return new ResponseEntity(new Error("User with id " + id + " is not found"), HttpStatus.NOT_FOUND);
+        try {
+            LOGGER.info("Fetching user with id {}", id);
+            User user = this.userService.findById((int)id);
+            if(user == null)
+                return new ResponseEntity<Object>(new Response<>(ErrorStatus.NOT_FOUND), HttpStatus.OK);
+            return new ResponseEntity<Object>(new Response<>(user), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return new ResponseEntity<Object>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        return new ResponseEntity<Object>(user, HttpStatus.OK);
     }
 
     @Override
