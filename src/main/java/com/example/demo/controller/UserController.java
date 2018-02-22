@@ -14,6 +14,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Api(value = "user api", description = "API relates to User Data")
 public interface UserController {
 
+    @RequestMapping(value = "/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "view a list of user data")
+    ResponseEntity listUsersIndex();
+
     @RequestMapping(value = "/user/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "view a list of user data")
     ResponseEntity listAllUsers();
@@ -36,5 +40,5 @@ public interface UserController {
 
     @RequestMapping(value = "/user/", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "delete all user data")
-    ResponseEntity<User> deleteAllUsers();
+    ResponseEntity<?> deleteAllUsers();
 }

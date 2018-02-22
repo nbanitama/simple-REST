@@ -13,7 +13,7 @@ public interface UserService {
     List<User> findAll();
     User findById(Integer id);
     @Transactional
-    void save(User user);
+    User save(User user);
     @Transactional
     void deleteById(Integer id);
     @Transactional

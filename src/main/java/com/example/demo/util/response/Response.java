@@ -1,4 +1,4 @@
-package com.example.demo.util;
+package com.example.demo.util.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -30,7 +30,9 @@ public class Response<T> {
             return "No data found on server.";
         else if(responseStatus.equals(ErrorStatus.NOT_FOUND))
             return "No specified data found on server.";
-        return "";
+        else if(responseStatus.equals(ErrorStatus.DUPLICATE))
+            return "Unable to create. A user with name already exists";
+        return null;
     }
 
     public Response(String status) {

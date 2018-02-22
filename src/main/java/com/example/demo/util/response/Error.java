@@ -1,4 +1,4 @@
-package com.example.demo.util;
+package com.example.demo.util.response;
 
 /**
  * Created by noba on 12/16/2017.
